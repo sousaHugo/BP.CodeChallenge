@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BluePrism.TechnicalTest.Com
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BluePrism.TechnicalTest.Services", "BluePrism.TechnicalTest.Services\BluePrism.TechnicalTest.Services.csproj", "{E71F595B-46DB-41D8-B679-2C6E07BD232E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BluePrism.TechnicalTest.Tests", "BluePrism.TechnicalTest.Services.Tests\BluePrism.TechnicalTest.Tests.csproj", "{BE89360A-A300-4DCA-9817-0B25CEEB0ECB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BluePrism.TechnicalTest.Tests", "BluePrism.TechnicalTest.Tests\BluePrism.TechnicalTest.Tests.csproj", "{BE89360A-A300-4DCA-9817-0B25CEEB0ECB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BluePrism.TechnicalTest.Contracts", "BluePrism.TechnicalTest.Contracts\BluePrism.TechnicalTest.Contracts.csproj", "{073D710E-EB80-4EF4-8F52-BD1D09A6BFE0}"
 EndProject
