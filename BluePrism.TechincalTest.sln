@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32811.315
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BluePrism.TechnicalTest.Files", "BluePrism.TechnicalTest.Files\BluePrism.TechnicalTest.Files.csproj", "{9C84828C-F365-4044-BDEB-B379EF4B8E31}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BluePrism.TechnicalTest", "BluePrism.TechnicalTest\BluePrism.TechnicalTest.csproj", "{229716FF-5B9E-421F-B025-9BBFCFB521BE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BluePrism.TechnicalTest.Common", "BluePrism.TechnicalTest.Common\BluePrism.TechnicalTest.Common.csproj", "{0268C99A-733D-4E79-A92E-52E13520D775}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BluePrism.TechnicalTest.Services", "BluePrism.TechnicalTest.Services\BluePrism.TechnicalTest.Services.csproj", "{E71F595B-46DB-41D8-B679-2C6E07BD232E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BluePrism.TechnicalTest.Files.Tests", "BluePrism.TechnicalTest.Files.Tests\BluePrism.TechnicalTest.Files.Tests.csproj", "{76CDC72F-DB06-407A-9500-41E38FFEE5D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BluePrism.TechnicalTest.Services.Tests", "BluePrism.TechnicalTest.Services.Tests\BluePrism.TechnicalTest.Services.Tests.csproj", "{BE89360A-A300-4DCA-9817-0B25CEEB0ECB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9C84828C-F365-4044-BDEB-B379EF4B8E31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C84828C-F365-4044-BDEB-B379EF4B8E31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C84828C-F365-4044-BDEB-B379EF4B8E31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C84828C-F365-4044-BDEB-B379EF4B8E31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{229716FF-5B9E-421F-B025-9BBFCFB521BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{229716FF-5B9E-421F-B025-9BBFCFB521BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{229716FF-5B9E-421F-B025-9BBFCFB521BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{229716FF-5B9E-421F-B025-9BBFCFB521BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0268C99A-733D-4E79-A92E-52E13520D775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0268C99A-733D-4E79-A92E-52E13520D775}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0268C99A-733D-4E79-A92E-52E13520D775}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0268C99A-733D-4E79-A92E-52E13520D775}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E71F595B-46DB-41D8-B679-2C6E07BD232E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E71F595B-46DB-41D8-B679-2C6E07BD232E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E71F595B-46DB-41D8-B679-2C6E07BD232E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E71F595B-46DB-41D8-B679-2C6E07BD232E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76CDC72F-DB06-407A-9500-41E38FFEE5D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76CDC72F-DB06-407A-9500-41E38FFEE5D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76CDC72F-DB06-407A-9500-41E38FFEE5D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76CDC72F-DB06-407A-9500-41E38FFEE5D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE89360A-A300-4DCA-9817-0B25CEEB0ECB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE89360A-A300-4DCA-9817-0B25CEEB0ECB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE89360A-A300-4DCA-9817-0B25CEEB0ECB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE89360A-A300-4DCA-9817-0B25CEEB0ECB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {09FE9334-6F63-4D93-92EE-F47B3D012F2B}
+	EndGlobalSection
+EndGlobal
