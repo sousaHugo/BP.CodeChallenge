@@ -1,7 +1,8 @@
 using BluePrism.TechnicalTest.Common.Exceptions;
+using BluePrism.TechnicalTest.Contracts.Interfaces.Files;
 using BluePrism.TechnicalTest.Files;
-using BluePrism.TechnicalTest.Services.Files;
-namespace BluePrism.TechnicalTest.Services.Tests.FileService
+
+namespace BluePrism.TechnicalTest.Tests.Services.FileService
 {
     public class FileServiceTestSaveInformation
     {

@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BluePrism.TechnicalTest.Files" Version="1.0.3" />
+    <PackageReference Include="BluePrism.TechnicalTest.Common" Version="1.0.0" />
+    <PackageReference Include="BluePrism.TechnicalTest.Contracts" Version="1.0.1" />
+    <PackageReference Include="BluePrism.TechnicalTest.Files" Version="1.0.4" />
   </ItemGroup>
 
 </Project>

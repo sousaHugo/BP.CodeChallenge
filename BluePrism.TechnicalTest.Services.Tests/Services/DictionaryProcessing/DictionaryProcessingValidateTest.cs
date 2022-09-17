@@ -1,6 +1,6 @@
-using BluePrism.TechnicalTest.Services.Processing;
+using BluePrism.TechnicalTest.Contracts.Interfaces.DictionaryProcessing;
 
-namespace BluePrism.TechnicalTest.Services.Tests.DictionaryProcessing
+namespace BluePrism.TechnicalTest.Tests.Services.DictionaryProcessing
 {
     public class DictionaryProcessingValidateTest
     {

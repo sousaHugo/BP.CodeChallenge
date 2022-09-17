@@ -1,4 +1,4 @@
-﻿namespace BluePrism.TechnicalTest.Services.Files
+﻿namespace BluePrism.TechnicalTest.Contracts.Interfaces.Files
 {
     public interface IFileService
     {

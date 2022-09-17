@@ -1,4 +1,5 @@
 ﻿using BluePrism.TechnicalTest.Common.Exceptions;
+using BluePrism.TechnicalTest.Contracts.Interfaces.Files;
 using BluePrism.TechnicalTest.Files;
 
 namespace BluePrism.TechnicalTest.Services.Files
