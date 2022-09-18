@@ -5,6 +5,8 @@ namespace BluePrism.TechnicalTest.Files
     public class FileOperation : IFileOperation
     {
         public FileOperation() { }
+
+        ///<inheritdoc cref="IFileOperation.Get(string)"/>
         public IEnumerable<string> Get(string FilePath)
         {
             if (string.IsNullOrEmpty(FilePath))
@@ -21,10 +23,13 @@ namespace BluePrism.TechnicalTest.Files
                 throw new FileReadingException(ex.Message);
             }
         }
+        ///<inheritdoc cref="IFileOperation.Create(string, string)"/>
         public void Create(string FilePath, string Text)
         {
             Create(FilePath, new List<string> { Text }.AsEnumerable());
         }
+        
+        ///<inheritdoc cref="IFileOperation.Create(string, IEnumerable{string})"/>
         public void Create(string FilePath, IEnumerable<string> TextList)
         {
             if (string.IsNullOrEmpty(FilePath))

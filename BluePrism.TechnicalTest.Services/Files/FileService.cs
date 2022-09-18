@@ -11,10 +11,8 @@ namespace BluePrism.TechnicalTest.Services.Files
         {
             _fileOperation = FileOperation;
         }
-        /// <summary>
-        /// Every class and member should have a one sentence
-        /// summary describing its purpose.
-        /// </summary>
+
+        ///<inheritdoc cref="IFileService.GetFileDataInformation(FileInfo)"/>
         public IEnumerable<string> GetFileDataInformation(FileInfo FileInfo)
         {
             if (FileInfo == null)
@@ -23,6 +21,7 @@ namespace BluePrism.TechnicalTest.Services.Files
             return _fileOperation.Get(FileInfo.FullName);
         }
 
+        ///<inheritdoc cref="IFileService.SaveFileDataInformation(FileInfo, IEnumerable{string})"/>
         public void SaveFileDataInformation(FileInfo FileInfo, IEnumerable<string> FileDataInformation)
         {
             if(FileInfo == null)

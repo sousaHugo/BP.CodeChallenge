@@ -1,8 +1,8 @@
-﻿using BluePrism.TechnicalTest;
-using BluePrism.TechnicalTest.Common.Helper;
+﻿using BluePrism.TechnicalTest.Common.Helper;
 using BluePrism.TechnicalTest.Contracts.Dtos;
 using BluePrism.TechnicalTest.Contracts.Interfaces.DictionaryProcessing;
 using BluePrism.TechnicalTest.Contracts.Interfaces.Files;
+using BluePrism.TechnicalTest.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
 public class Program
@@ -35,10 +35,12 @@ public class Program
         var dictionaryOfWordsInput = _fileService.GetFileDataInformation(new FileInfo(processInputDto.DictionaryFileUrl));
         DictionaryOfWordsInputValidation(processInputDto.StartWord, processInputDto.EndWord, dictionaryOfWordsInput);
 
+        Console.WriteLine("Processing has began...");
         var arrayOfWordsOutput = _processingService.ProcessWordDictionary(processInputDto.StartWord, processInputDto.EndWord, dictionaryOfWordsInput.ToHashSet());
-        
+        Console.WriteLine("Processing has finished and will be saved...");
         //Saving the result list to the txt file
         _fileService.SaveFileDataInformation(URLHelper.Url(processInputDto.DictionaryFileUrl, processInputDto.ResultFileUrl), arrayOfWordsOutput);
+        Console.WriteLine("Processing has finished.");
     }
 
     /// <summary>
@@ -112,6 +114,11 @@ public class Program
 
         return new ProcessFileInputDto(dictionaryFilePath, startingWord, endWord, resultFileName);
     }
+
+    /// <summary>
+    /// This method is responsible for the validation of the StartWord, EndWord and the List of Words.
+    /// If any error is encountered the process will be terminated.
+    /// </summary>
     static void DictionaryOfWordsInputValidation(string StartWord, string EndWord, IEnumerable<string> DictionaryOfWordsInput)
     {
         var dictionaryOfWordsInputValid = _processingService.ProcessWordDictionaryValidate(StartWord, EndWord, DictionaryOfWordsInput.ToHashSet());

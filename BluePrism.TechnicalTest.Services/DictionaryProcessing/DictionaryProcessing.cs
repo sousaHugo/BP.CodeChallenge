@@ -6,6 +6,7 @@ namespace BluePrism.TechnicalTest.Services.Processing
 {
     public class DictionaryProcessing : IDictionaryProcessing
     {
+        ///<inheritdoc cref="IDictionaryProcessing.ProcessWordDictionaryValidate(string, string, HashSet{string})"/>
         public IEnumerable<string> ProcessWordDictionaryValidate(string StartWord, string EndWord, HashSet<string> WordDictionary)
         {
             if (!WordDictionary.Any())
@@ -27,8 +28,15 @@ namespace BluePrism.TechnicalTest.Services.Processing
             if (StartWord.ToUpper().Equals(EndWord.ToUpper()))
                 yield return "Start Word and End Word are the same.";
 
+            if (!string.IsNullOrEmpty(StartWord) && StartWord.Length != ProcessingConstants.LettersMaxLength)
+                yield return "Start Word must have 4 Charachters.";
+
+            if (!string.IsNullOrEmpty(EndWord) && EndWord.Length != ProcessingConstants.LettersMaxLength)
+                yield return "End Word must have 4 Charachters.";
 
         }
+
+        ///<inheritdoc cref="IDictionaryProcessing.ProcessWordDictionary(string, string, HashSet{string})"/>
         public IEnumerable<string> ProcessWordDictionary(string StartWord, string EndWord, HashSet<string> WordDictionary)
         {
             Queue<string> pathQueue = new Queue<string>();

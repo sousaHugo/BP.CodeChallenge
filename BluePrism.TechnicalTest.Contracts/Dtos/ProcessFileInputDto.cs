@@ -4,8 +4,25 @@ namespace BluePrism.TechnicalTest.Contracts.Dtos
 {
     public record ProcessFileInputDto(string DictionaryFileUrl, string StartWord, string EndWord, string ResultFileUrl);
 
+    /// <summary>
+    /// This class contains all the extensions methods of the record <see cref="ProcessFileInputDto"/>.
+    /// <list type="bullet">
+    /// <item>
+    /// <term><see cref="ProcessFileInputDtoValidation.Validate(ProcessFileInputDto)"/></term>
+    /// <description>Validates if the object is valid for processing.</description>
+    /// </item>
+    /// </list>
+    /// </summary>
     public static class ProcessFileInputDtoValidation
     {
+        /// <summary>
+        /// This method is going to validate if the <see cref="ProcessFileInputDto"/> is valid to be processed.
+        /// <para>If any error is encountered it will written on the console.</para>
+        /// </summary>
+        /// <param name="ProcessFileInputDto" cref="ProcessFileInputDto">Object with all the information that process needs to run.</param>
+        /// <returns>
+        /// This method returns a True or False. True if the object is valid and False if the object is not valid.
+        /// </returns>
         public static bool Validate(this ProcessFileInputDto ProcessFileInputDto)
         {
             var errorList = new List<string>();
