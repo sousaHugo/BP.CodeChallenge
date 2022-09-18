@@ -11,6 +11,10 @@ namespace BluePrism.TechnicalTest.Services.Files
         {
             _fileOperation = FileOperation;
         }
+        /// <summary>
+        /// Every class and member should have a one sentence
+        /// summary describing its purpose.
+        /// </summary>
         public IEnumerable<string> GetFileDataInformation(FileInfo FileInfo)
         {
             if (FileInfo == null)

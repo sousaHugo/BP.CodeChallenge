@@ -1,4 +1,6 @@
-﻿namespace BluePrism.TechnicalTest.Contracts.Dtos
+﻿using BluePrism.TechnicalTest.Common.Constants;
+
+namespace BluePrism.TechnicalTest.Contracts.Dtos
 {
     public record ProcessFileInputDto(string DictionaryFileUrl, string StartWord, string EndWord, string ResultFileUrl);
 
@@ -20,10 +22,10 @@
             if (string.IsNullOrEmpty(ProcessFileInputDto.ResultFileUrl))
                 errorList.Add("Result File Name is required");
 
-            if (!string.IsNullOrEmpty(ProcessFileInputDto.StartWord) && ProcessFileInputDto.StartWord.Length != 4)
+            if (!string.IsNullOrEmpty(ProcessFileInputDto.StartWord) && ProcessFileInputDto.StartWord.Length != ProcessingConstants.LettersMaxLength)
                 errorList.Add("Start Word must have 4 Charachters.");
 
-            if (!string.IsNullOrEmpty(ProcessFileInputDto.EndWord) && ProcessFileInputDto.EndWord.Length != 4)
+            if (!string.IsNullOrEmpty(ProcessFileInputDto.EndWord) && ProcessFileInputDto.EndWord.Length != ProcessingConstants.LettersMaxLength)
                 errorList.Add("End Word must have 4 Charachters.");
 
             if (!File.Exists(ProcessFileInputDto.DictionaryFileUrl))

@@ -12,6 +12,7 @@ public class Program
 
     static Program()
     {
+        //Initialization of the Host with all the necessary configurations for DI
         var builder = ProgramHostBuilder.CreateHostBuilder().Build();
         _fileService = builder.Services.GetService<IFileService>();
         _processingService = builder.Services.GetService<IDictionaryProcessing>();
@@ -29,7 +30,8 @@ public class Program
         if (!isProcessInputDtoValid) return;
 
 
-        //Getting and validation of the dictionary
+        //Getting (read the dictionary file from the Url provided)
+        //and validation of the dictionary
         var dictionaryOfWordsInput = _fileService.GetFileDataInformation(new FileInfo(processInputDto.DictionaryFileUrl));
         DictionaryOfWordsInputValidation(processInputDto.StartWord, processInputDto.EndWord, dictionaryOfWordsInput);
 
@@ -38,6 +40,37 @@ public class Program
         //Saving the result list to the txt file
         _fileService.SaveFileDataInformation(URLHelper.Url(processInputDto.DictionaryFileUrl, processInputDto.ResultFileUrl), arrayOfWordsOutput);
     }
+
+    /// <summary>
+    /// This method is responsible for the ProcessFileInputDto object. This object contains all the information for the processing like
+    /// <para>Dictionary, Start and End Word and the Result File Name.</para>
+    /// <para>If this method receive args filled in Its using that information. If not the program will ask the user for all the information.<para>
+    /// </summary>
+    /// <param name="args">The command line args. Must have 4 parameters
+    /// <list type="bullet">
+    /// <listheader>
+    /// <term>Position</term>
+    /// <descripton>Description</descripton>
+    /// </listheader>
+    /// <item>
+    /// <term>[0] - Dictionary</term>
+    /// <description>The URL for the Word Dictionary</description>
+    /// </item>
+    /// <item>
+    /// <term>[1] - Start Word</term>
+    /// <description>Word to Start the Process</description>
+    /// </item>
+    /// <item>
+    /// <term>[2] - End Word</term>
+    /// <description>Word to End the Process</description>
+    /// </item>
+    /// <item>
+    /// <term>[3] - Result File Name</term>
+    /// <description>Name of the result file. If the name doesn't have the TXT extension the process will included it.</description>
+    /// </item>
+    /// </list>>
+    /// </param>
+    /// <returns>The initialized <see cref="ProcessFileInputDto"/>.</returns>
     static ProcessFileInputDto GetUserInputs(string[] args)
     {
 

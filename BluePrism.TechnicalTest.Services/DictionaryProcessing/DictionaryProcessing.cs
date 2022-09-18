@@ -1,4 +1,5 @@
-﻿using BluePrism.TechnicalTest.Contracts.Interfaces.DictionaryProcessing;
+﻿using BluePrism.TechnicalTest.Common.Constants;
+using BluePrism.TechnicalTest.Contracts.Interfaces.DictionaryProcessing;
 using System.Text;
 
 namespace BluePrism.TechnicalTest.Services.Processing
@@ -10,7 +11,7 @@ namespace BluePrism.TechnicalTest.Services.Processing
             if (!WordDictionary.Any())
                 yield return "The Word Dictionary is Empty.";
 
-            if(WordDictionary.Count < 2)
+            if(WordDictionary.Count < ProcessingConstants.DictionaryMinLength)
                 yield return "The Word Dictionary must have at least two words.";
 
             if (string.IsNullOrEmpty(StartWord))
@@ -20,7 +21,7 @@ namespace BluePrism.TechnicalTest.Services.Processing
                 yield return "End Word is required to Process the Dictionary.";
 
             if (!string.IsNullOrEmpty(EndWord) && !WordDictionary.Any(a => a.ToUpper().Equals(EndWord.ToUpper())) 
-                && WordDictionary.Any() && WordDictionary.Count > 2)
+                && WordDictionary.Any() && WordDictionary.Count > ProcessingConstants.DictionaryMinLength)
                 yield return "The Dictionary does not contains the End Word.";
 
             if (StartWord.ToUpper().Equals(EndWord.ToUpper()))

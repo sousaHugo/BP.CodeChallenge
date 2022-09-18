@@ -31,7 +31,6 @@ namespace BluePrism.TechnicalTest.Tests.Application
             var expectedResult = new List<string>() { "Spin", "Spit", "Spot" }.AsEnumerable();
 
             Program.Main(new string[4] { _fullFileName, "Spin", "Spot", _outputName });
-
             Assert.That(File.Exists(_outputFullName), Is.True);
 
             var resultData = _fileOperation.Get(_outputFullName);
