@@ -1,11 +1,15 @@
-﻿using BluePrism.TechnicalTest.Contracts.Interfaces.DictionaryProcessing;
-using BluePrism.TechnicalTest.Contracts.Interfaces.Files;
+﻿using BluePrism.TechnicalTest.Contracts.Dtos;
+using BluePrism.TechnicalTest.Contracts.Interfaces.DictionaryProcessing;
+using BluePrism.TechnicalTest.Contracts.Interfaces.Dictionary;
 using BluePrism.TechnicalTest.Files;
-using BluePrism.TechnicalTest.Services.Files;
+using BluePrism.TechnicalTest.Models;
+using BluePrism.TechnicalTest.Services.Dictionary;
 using BluePrism.TechnicalTest.Services.Processing;
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace BluePrism.TechnicalTest.Infrastructure
 {
@@ -27,9 +31,13 @@ namespace BluePrism.TechnicalTest.Infrastructure
                 }).ConfigureServices((context, services) =>
                 {
                     services.AddSingleton<IFileOperation, FileOperation>();
-                    services.AddScoped<IFileService, FileService>();
-                    services.AddScoped<IDictionaryProcessing, DictionaryProcessing>();
-                });
+                    services.AddScoped<IDictionaryDataService, DictionaryDataService>();
+                    services.AddScoped<IDictionaryProcessing, DictionaryProcessingService>();
+                    services.AddScoped<IValidator<ProcessFileInputRequest>, ProcessFileInputRequestValidator>();
+                    services.AddScoped<IValidator<ProcessFileInputDto>, ProcessFileInputValidator>();
+                    services.AddScoped<IValidator<FileGetDataInformationDto>, FileGetDataInformationValidator>();
+                    services.AddScoped<IValidator<FileSaveDataInformationDto>, FileSaveDataInformationValidator>();
+                }).ConfigureLogging((_, logging) => logging.ClearProviders().AddConsole());
 
             return hostBuilder;
         }

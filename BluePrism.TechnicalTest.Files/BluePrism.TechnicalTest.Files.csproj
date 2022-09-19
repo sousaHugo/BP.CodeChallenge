@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BluePrism.TechnicalTest.Common" Version="3.0.0" />
+    <ProjectReference Include="..\BluePrism.TechnicalTest.Common\BluePrism.TechnicalTest.Common.csproj" />
   </ItemGroup>
 
 </Project>

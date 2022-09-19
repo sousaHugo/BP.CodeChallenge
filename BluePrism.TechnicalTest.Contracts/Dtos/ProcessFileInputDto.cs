@@ -1,63 +1,45 @@
 ﻿using BluePrism.TechnicalTest.Common.Constants;
+using FluentValidation;
 
 namespace BluePrism.TechnicalTest.Contracts.Dtos
 {
-    public record ProcessFileInputDto(string DictionaryFileUrl, string StartWord, string EndWord, string ResultFileUrl);
+    public class ProcessFileInputDto
+    {
+        public string StartWord { get; set; }
+        public string EndWord { get; set; }
+        public IEnumerable<string> WordsDictionary { get; set; }
+    }
 
     /// <summary>
-    /// This class contains all the extensions methods of the record <see cref="ProcessFileInputDto"/>.
+    /// This class contains all the validator method of the class <see cref="ProcessFileInputDto"/>.
     /// <list type="bullet">
     /// <item>
-    /// <term><see cref="ProcessFileInputDtoValidation.Validate(ProcessFileInputDto)"/></term>
+    /// <term><see cref="ProcessFileInputValidator.Validate(ProcessFileInputDto)"/></term>
     /// <description>Validates if the object is valid for processing.</description>
     /// </item>
     /// </list>
     /// </summary>
-    public static class ProcessFileInputDtoValidation
+    public class ProcessFileInputValidator : AbstractValidator<ProcessFileInputDto>
     {
         /// <summary>
         /// This method is going to validate if the <see cref="ProcessFileInputDto"/> is valid to be processed.
-        /// <para>If any error is encountered it will written on the console.</para>
+        /// <para>All the validator rules are specified in here</para>
         /// </summary>
-        /// <param name="ProcessFileInputDto" cref="ProcessFileInputDto">Object with all the information that process needs to run.</param>
-        /// <returns>
-        /// This method returns a True or False. True if the object is valid and False if the object is not valid.
-        /// </returns>
-        public static bool Validate(this ProcessFileInputDto ProcessFileInputDto)
+        public ProcessFileInputValidator()
         {
-            var errorList = new List<string>();
-
-            if (string.IsNullOrEmpty(ProcessFileInputDto.DictionaryFileUrl))
-                errorList.Add("Dictionary File Path is required");
-
-            if (string.IsNullOrEmpty(ProcessFileInputDto.StartWord))
-                errorList.Add("Start Word is required");
-
-            if (string.IsNullOrEmpty(ProcessFileInputDto.EndWord))
-                errorList.Add("End Word is required");
-
-            if (string.IsNullOrEmpty(ProcessFileInputDto.ResultFileUrl))
-                errorList.Add("Result File Name is required");
-
-            if (!string.IsNullOrEmpty(ProcessFileInputDto.StartWord) && ProcessFileInputDto.StartWord.Length != ProcessingConstants.LettersMaxLength)
-                errorList.Add("Start Word must have 4 Charachters.");
-
-            if (!string.IsNullOrEmpty(ProcessFileInputDto.EndWord) && ProcessFileInputDto.EndWord.Length != ProcessingConstants.LettersMaxLength)
-                errorList.Add("End Word must have 4 Charachters.");
-
-            if (!File.Exists(ProcessFileInputDto.DictionaryFileUrl))
-                errorList.Add("Dictionary File Path doesn't exists.");
-
-            if (errorList.Any())
+            RuleFor(x => x.StartWord).NotNull().WithMessage("Start Word is required.");
+            RuleFor(x => x.EndWord).NotNull().WithMessage("End Word is required.");
+            RuleFor(x => x.StartWord).Length(ProcessingConstants.LettersMaxLength).WithMessage("Start Word must have 4 Charachters."); 
+            RuleFor(x => x.EndWord).Length(ProcessingConstants.LettersMaxLength).WithMessage("End Word must have 4 Charachters.");
+            RuleFor(x => x.WordsDictionary).NotNull().NotEmpty().WithMessage("The Word Dictionary could not be Empty.");
+            RuleFor(x => x.WordsDictionary).Must(a => a.Count() > ProcessingConstants.DictionaryMinLength).WithMessage("The Word Dictionary must have at least two words.");
+            RuleFor(x => x.StartWord.ToUpper()).NotEqual(a => a.EndWord.ToUpper()).WithMessage("Start Word and End Word are the same.");
+            RuleFor(x => x).Custom((a, context) =>
             {
-                Console.WriteLine("User Inputs Are Not Valid:");
-                Console.WriteLine("Errors:");
-
-                foreach (var item in errorList) Console.WriteLine(item);
-
-                return false;
-            }
-            return true;
+                if (!a.WordsDictionary.Any(word => word.ToUpper().Equals(a.EndWord.ToUpper())))
+                    context.AddFailure("The Dictionary does not contains the End Word.");
+            });
         }
     }
+
 }

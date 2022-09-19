@@ -43,7 +43,7 @@
         /// <exception cref="BluePrism.TechnicalTest.Common.Exceptions.ArgumentInvalidException">
         /// Thrown when the parameter FilePath is not filled in or if the parameter Text is null or empty.
         /// </exception>
-        /// <exception cref="BluePrism.TechnicalTest.Common.Exceptions.FileReadingException">
+        /// <exception cref="BluePrism.TechnicalTest.Common.Exceptions.FileWrittingException">
         /// Thrown when an unexpected error occurs.
         /// </exception>
         void Create(string FilePath, IEnumerable<string> TextList);

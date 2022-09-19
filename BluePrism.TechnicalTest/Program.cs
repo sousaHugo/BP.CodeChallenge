@@ -1,47 +1,102 @@
-﻿using BluePrism.TechnicalTest.Common.Helper;
+﻿using BluePrism.TechnicalTest.Common.Exceptions;
+using BluePrism.TechnicalTest.Common.Helper;
 using BluePrism.TechnicalTest.Contracts.Dtos;
 using BluePrism.TechnicalTest.Contracts.Interfaces.DictionaryProcessing;
-using BluePrism.TechnicalTest.Contracts.Interfaces.Files;
+using BluePrism.TechnicalTest.Contracts.Interfaces.Dictionary;
 using BluePrism.TechnicalTest.Infrastructure;
+using BluePrism.TechnicalTest.Models;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System.Text;
 
 public class Program
 {
-    private static IFileService _fileService;
+    private static IDictionaryDataService _fileService;
     private static IDictionaryProcessing _processingService;
+    private static IValidator<ProcessFileInputRequest> _validator;
+    private static ILogger _logger;
 
     static Program()
     {
         //Initialization of the Host with all the necessary configurations for DI
         var builder = ProgramHostBuilder.CreateHostBuilder().Build();
-        _fileService = builder.Services.GetService<IFileService>();
+        _fileService = builder.Services.GetService<IDictionaryDataService>();
         _processingService = builder.Services.GetService<IDictionaryProcessing>();
+        _validator = builder.Services.GetService<IValidator<ProcessFileInputRequest>>();
+        _logger = builder.Services.GetService<ILogger<Program>>();
+
+        _logger.LogInformation("Program initialization started with success.");
     }
 
     public static void Main(string[] args)
     {
+        _logger.LogInformation("Program has started.");
+
+        try
+        {
+            Process(args);
+        }
+        catch (Exception ex)
+        {
+            if (ex.GetType().Equals(typeof(ArgumentInvalidException)))
+            {
+                StringBuilder errorMessage = new StringBuilder(ex.Message);
+                _logger.LogError(errorMessage.ToString());
+            }
+            else
+            {
+                _logger.LogError(ex.Message);
+            }
+        }
+
+        _logger.LogInformation("Program has finished.");
+    }
+
+    static void Process(string[] args)
+    {
+       
         Console.WriteLine("Welcome to the Blue Prims Technical Test");
 
         //Processing and Validation of the Console inputs
         //Start Word, EndWord, Result File Name and Dictionary URL
         var processInputDto = GetUserInputs(args);
-        var isProcessInputDtoValid = processInputDto.Validate();
+        var userInputValidate = _validator.Validate(processInputDto);
 
-        if (!isProcessInputDtoValid) return;
-
-
+        if (!userInputValidate.IsValid)
+        {
+            StringBuilder errorMessage = new StringBuilder("Program has stopped due the fact of some inputs were wrongly filled in.");
+            errorMessage.Append(Environment.NewLine).Append(string.Join("", userInputValidate.Errors.Select(a => a.ErrorMessage + Environment.NewLine).ToList()));
+            _logger.LogError(errorMessage.ToString());
+            return;
+        }
         //Getting (read the dictionary file from the Url provided)
         //and validation of the dictionary
-        var dictionaryOfWordsInput = _fileService.GetFileDataInformation(new FileInfo(processInputDto.DictionaryFileUrl));
-        DictionaryOfWordsInputValidation(processInputDto.StartWord, processInputDto.EndWord, dictionaryOfWordsInput);
+        var processFileInputDto = new ProcessFileInputDto() { StartWord = processInputDto.StartWord, EndWord = processInputDto.EndWord };
+        processFileInputDto.WordsDictionary = _fileService.GetDictionaryData(new FileGetDataInformationDto() { File = new FileInfo(processInputDto.DictionaryFileUrl) });
 
-        Console.WriteLine("Processing has began...");
-        var arrayOfWordsOutput = _processingService.ProcessWordDictionary(processInputDto.StartWord, processInputDto.EndWord, dictionaryOfWordsInput.ToHashSet());
-        Console.WriteLine("Processing has finished and will be saved...");
+        var dictionaryOfWordsInputValidate = _processingService.ProcessWordDictionaryValidate(processFileInputDto);
+
+        if (!dictionaryOfWordsInputValidate.IsValid)
+        {
+            StringBuilder errorMessage = new StringBuilder("Program has stopped due the fact of the information could not be processed.");
+            errorMessage.Append(Environment.NewLine).Append(string.Join("", dictionaryOfWordsInputValidate.Errors.Select(a => a.ErrorMessage + Environment.NewLine).ToList()));
+            _logger.LogError(errorMessage.ToString());
+
+            return;
+        }
+
+        _logger.LogInformation("Processing has began...");
+
+        var arrayOfWordsOutput = _processingService.ProcessWordDictionary(processFileInputDto);
+        _logger.LogInformation("Processing has finished and will be saved...");
+
         //Saving the result list to the txt file
-        _fileService.SaveFileDataInformation(URLHelper.Url(processInputDto.DictionaryFileUrl, processInputDto.ResultFileUrl), arrayOfWordsOutput);
-        Console.WriteLine("Processing has finished.");
+        _fileService.SaveDictionaryResultData(new FileSaveDataInformationDto() { File = URLHelper.Url(processInputDto.DictionaryFileUrl, processInputDto.ResultFileUrl), DataInformation = arrayOfWordsOutput });
+
+        _logger.LogInformation("Processing has finished successfully.");
     }
+
 
     /// <summary>
     /// This method is responsible for the ProcessFileInputDto object. This object contains all the information for the processing like
@@ -72,8 +127,8 @@ public class Program
     /// </item>
     /// </list>>
     /// </param>
-    /// <returns>The initialized <see cref="ProcessFileInputDto"/>.</returns>
-    static ProcessFileInputDto GetUserInputs(string[] args)
+    /// <returns>The initialized <see cref="ProcessFileInputRequest"/>.</returns>
+    static ProcessFileInputRequest GetUserInputs(string[] args)
     {
 
         var dictionaryFilePath = string.Empty;
@@ -102,35 +157,17 @@ public class Program
         }
         else
         {
-            Console.WriteLine("Program needs four parameters:");
-            Console.WriteLine("1 - Dictionary File");
-            Console.WriteLine("2 - Start Word");
-            Console.WriteLine("3 - End Word");
-            Console.WriteLine("4 - Result File Name");
+            _logger.LogError("Program needs four parameters:");
+            _logger.LogError("1 - Dictionary File");
+            _logger.LogError("2 - Start Word");
+            _logger.LogError("3 - End Word");
+            _logger.LogError("4 - Result File Name");
         }
 
         if (!string.IsNullOrEmpty(resultFileName) && !resultFileName.EndsWith(".txt"))
             resultFileName += ".txt";
 
-        return new ProcessFileInputDto(dictionaryFilePath, startingWord, endWord, resultFileName);
+        return new ProcessFileInputRequest(dictionaryFilePath, startingWord, endWord, resultFileName);
     }
 
-    /// <summary>
-    /// This method is responsible for the validation of the StartWord, EndWord and the List of Words.
-    /// If any error is encountered the process will be terminated.
-    /// </summary>
-    static void DictionaryOfWordsInputValidation(string StartWord, string EndWord, IEnumerable<string> DictionaryOfWordsInput)
-    {
-        var dictionaryOfWordsInputValid = _processingService.ProcessWordDictionaryValidate(StartWord, EndWord, DictionaryOfWordsInput.ToHashSet());
-
-        if (dictionaryOfWordsInputValid.Any())
-        {
-            Console.WriteLine("Dictionary is not Valid:");
-            Console.WriteLine("Errors:");
-            foreach (var item in dictionaryOfWordsInputValid) Console.WriteLine(item);
-
-            return;
-        }
-
-    }
 }

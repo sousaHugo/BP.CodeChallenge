@@ -7,9 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BluePrism.TechnicalTest.Common" Version="3.0.0" />
-    <PackageReference Include="BluePrism.TechnicalTest.Contracts" Version="3.0.0" />
-    <PackageReference Include="BluePrism.TechnicalTest.Files" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BluePrism.TechnicalTest.Contracts\BluePrism.TechnicalTest.Contracts.csproj" />
+    <ProjectReference Include="..\BluePrism.TechnicalTest.Files\BluePrism.TechnicalTest.Files.csproj" />
   </ItemGroup>
 
 </Project>
