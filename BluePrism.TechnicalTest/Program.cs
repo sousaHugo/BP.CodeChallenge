@@ -9,6 +9,7 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Text;
+using BluePrism.TechnicalTest.Common.Constants;
 
 public class Program
 {
@@ -16,7 +17,6 @@ public class Program
     private static IDictionaryProcessing _processingService;
     private static IValidator<ProcessFileInputRequest> _validator;
     private static ILogger _logger;
-
     static Program()
     {
         //Initialization of the Host with all the necessary configurations for DI
@@ -36,6 +36,7 @@ public class Program
         try
         {
             Process(args);
+            _logger.LogInformation("Program has finished.");
         }
         catch (Exception ex)
         {
@@ -47,10 +48,12 @@ public class Program
             else
             {
                 _logger.LogError(ex.Message);
+                Console.WriteLine($"An error has ocurrred during the execution. See log file for more information at {LogConstants.LogFileDestination}.");
             }
+            _logger.LogError("Program has finished.");
         }
 
-        _logger.LogInformation("Program has finished.");
+        
     }
 
     static void Process(string[] args)
@@ -65,9 +68,10 @@ public class Program
 
         if (!userInputValidate.IsValid)
         {
-            StringBuilder errorMessage = new StringBuilder("Program has stopped due the fact of some inputs were wrongly filled in.");
+            StringBuilder errorMessage = new StringBuilder("Program has stopped due the fact of some inputs were wrongly filled in:");
             errorMessage.Append(Environment.NewLine).Append(string.Join("", userInputValidate.Errors.Select(a => a.ErrorMessage + Environment.NewLine).ToList()));
             _logger.LogError(errorMessage.ToString());
+            Console.WriteLine(errorMessage.ToString());
             return;
         }
         //Getting (read the dictionary file from the Url provided)
@@ -82,7 +86,7 @@ public class Program
             StringBuilder errorMessage = new StringBuilder("Program has stopped due the fact of the information could not be processed.");
             errorMessage.Append(Environment.NewLine).Append(string.Join("", dictionaryOfWordsInputValidate.Errors.Select(a => a.ErrorMessage + Environment.NewLine).ToList()));
             _logger.LogError(errorMessage.ToString());
-
+            Console.WriteLine(errorMessage.ToString());
             return;
         }
 
@@ -91,8 +95,10 @@ public class Program
         var arrayOfWordsOutput = _processingService.ProcessWordDictionary(processFileInputDto);
         _logger.LogInformation("Processing has finished and will be saved...");
 
+        var savingUrl = URLHelper.Url(processInputDto.DictionaryFileUrl, processInputDto.ResultFileUrl);
         //Saving the result list to the txt file
-        _fileService.SaveDictionaryResultData(new FileSaveDataInformationDto() { File = URLHelper.Url(processInputDto.DictionaryFileUrl, processInputDto.ResultFileUrl), DataInformation = arrayOfWordsOutput });
+        _fileService.SaveDictionaryResultData(new FileSaveDataInformationDto() { File = savingUrl, DataInformation = arrayOfWordsOutput });
+        Console.WriteLine($"File saved at {savingUrl.FullName} with success.");
 
         _logger.LogInformation("Processing has finished successfully.");
     }

@@ -2,7 +2,7 @@
 {
     public static class ProcessingConstants
     {
-        public static int LettersMaxLength = 4;
-        public static int DictionaryMinLength = 2;
+        public static readonly int LettersMaxLength = 4;
+        public static readonly int DictionaryMinLength = 2;
     }
 }

@@ -1,4 +1,7 @@
 using BluePrism.TechnicalTest.Common.Exceptions;
+using BluePrism.TechnicalTest.Services.Dictionary;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace BluePrism.TechnicalTest.Files.Tests
 {
@@ -7,11 +10,14 @@ namespace BluePrism.TechnicalTest.Files.Tests
         private IFileOperation _fileOperation;
         private readonly string _urlBluePrismFilesTestsPath = @"C:\BluePrismFiles";
         private readonly List<string> _linesSuccess = new List<string>() { "Spin", "Spin", "Spit", "Spot" };
+        private ILogger<FileOperation> _logger;
 
         [SetUp]
         public void Setup()
         {
-            _fileOperation = new FileOperation();
+            _logger = Mock.Of<ILogger<FileOperation>>();
+
+            _fileOperation = new FileOperation(_logger);
 
             if (!Directory.Exists(_urlBluePrismFilesTestsPath))
                 Directory.CreateDirectory(_urlBluePrismFilesTestsPath);

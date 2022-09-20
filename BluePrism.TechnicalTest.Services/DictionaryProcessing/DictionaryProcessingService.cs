@@ -3,28 +3,32 @@ using BluePrism.TechnicalTest.Contracts.Dtos;
 using BluePrism.TechnicalTest.Contracts.Interfaces.DictionaryProcessing;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.Extensions.Logging;
+
 
 namespace BluePrism.TechnicalTest.Services.Processing
 {
     public class DictionaryProcessingService : IDictionaryProcessing
     {
         private readonly IValidator<ProcessFileInputDto> _validator;
-
-        public DictionaryProcessingService(IValidator<ProcessFileInputDto> Validator)
+        private readonly ILogger _logger;
+        public DictionaryProcessingService(IValidator<ProcessFileInputDto> Validator, ILogger<DictionaryProcessingService> Logger)
         {
             _validator = Validator;
+            _logger = Logger;
         }
 
         ///<inheritdoc cref="IDictionaryProcessing.ProcessWordDictionaryValidate(ProcessFileInputDto)"/>
         public ValidationResult ProcessWordDictionaryValidate(ProcessFileInputDto ProcessFileInputDto)
         {
+            _logger.LogInformation("Validating Words Dictionary...");
             return _validator.Validate(ProcessFileInputDto);
         }
 
         ///<inheritdoc cref="IDictionaryProcessing.ProcessWordDictionary(ProcessFileInputDto)"/>
         public IEnumerable<string> ProcessWordDictionary(ProcessFileInputDto ProcessFileInputDto)
         {
-            //List<IList<string>> res = new List<IList<string>>();
+            _logger.LogInformation("Processing Words Dictionary...");
             List<string> res = new List<string>();
 
             //Removes from the processing all the Words that have different sizes from the Start and EndWord
@@ -63,7 +67,6 @@ namespace BluePrism.TechnicalTest.Services.Processing
                                 if (next.ToUpper().Equals(ProcessFileInputDto.EndWord.ToUpper()))
                                 {
                                     pathFounded = true;
-                                    //res.Add(new List<string>(currPathList));
                                     res = new List<string>(currPathList);
                                 }
 
@@ -84,9 +87,9 @@ namespace BluePrism.TechnicalTest.Services.Processing
                 if (pathFounded)
                     break;
             }
-
-
-            return res.DistinctBy(a => a.ToUpper());
+            res = res.Select(word => char.ToUpper(word[0]) + word.Substring(1)).DistinctBy(a => a.ToUpper()).ToList();
+            _logger.LogInformation($"Words Dictionary Processed. {res.Count} Words were found.");
+            return res;
         }
     }
 }

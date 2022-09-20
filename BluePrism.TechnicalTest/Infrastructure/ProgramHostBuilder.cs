@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using BluePrism.TechnicalTest.Common.Constants;
 
 namespace BluePrism.TechnicalTest.Infrastructure
 {
@@ -23,6 +25,12 @@ namespace BluePrism.TechnicalTest.Infrastructure
         /// <returns>The initialized <see cref="IHostBuilder"/>.</returns>
         public static IHostBuilder CreateHostBuilder(string[] args = null)
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .MinimumLevel.Error().MinimumLevel.Information()
+                .WriteTo.File(LogConstants.LogFileDestination)
+            .CreateLogger();
+
             var hostBuilder = Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, builder) =>
                 {
@@ -37,7 +45,10 @@ namespace BluePrism.TechnicalTest.Infrastructure
                     services.AddScoped<IValidator<ProcessFileInputDto>, ProcessFileInputValidator>();
                     services.AddScoped<IValidator<FileGetDataInformationDto>, FileGetDataInformationValidator>();
                     services.AddScoped<IValidator<FileSaveDataInformationDto>, FileSaveDataInformationValidator>();
-                }).ConfigureLogging((_, logging) => logging.ClearProviders().AddConsole());
+                })
+                .ConfigureLogging((_, logging) => logging.ClearProviders().AddConsole()).UseSerilog();
+
+
 
             return hostBuilder;
         }

@@ -1,6 +1,6 @@
-using BluePrism.TechnicalTest.Common.Exceptions;
 using BluePrism.TechnicalTest.Files;
-using System.Xml.Linq;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace BluePrism.TechnicalTest.Tests.Application
 {
@@ -13,13 +13,16 @@ namespace BluePrism.TechnicalTest.Tests.Application
         private string _fullFileName = string.Empty;
         private string _outputName = "OutputFile.txt";
         private string _outputFullName = string.Empty;
+        private ILogger<FileOperation> _logger;
+
         [SetUp]
         public void Setup()
         {
             if (!Directory.Exists(_urlBluePrismFilesTestsPath))
                 Directory.CreateDirectory(_urlBluePrismFilesTestsPath);
 
-            _fileOperation = new FileOperation();
+            _logger = Mock.Of<ILogger<FileOperation>>();
+            _fileOperation = new FileOperation(_logger);
             _fullFileName = $"{_urlBluePrismFilesTestsPath}\\{_fileName}";
             _outputFullName = $"{_urlBluePrismFilesTestsPath}\\{_outputName}";
             _fileOperation.Create(_fullFileName, _linesSuccess);

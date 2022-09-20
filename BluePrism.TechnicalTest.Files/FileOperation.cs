@@ -1,14 +1,19 @@
 ﻿using BluePrism.TechnicalTest.Common.Exceptions;
+using BluePrism.TechnicalTest.Common.Helper;
+using Microsoft.Extensions.Logging;
 
 namespace BluePrism.TechnicalTest.Files
 {
     public class FileOperation : IFileOperation
     {
-        public FileOperation() { }
+        private readonly ILogger _logger;
+        public FileOperation(ILogger<FileOperation> Logger) { _logger = Logger; }
 
         ///<inheritdoc cref="IFileOperation.Get(string)"/>
         public IEnumerable<string> Get(string FilePath)
         {
+            _logger.LogInformation($"FileOperation: Getting file {FilePath}");
+
             if (string.IsNullOrEmpty(FilePath))
                 throw new ArgumentInvalidException($"Filepath must be provided.");
 
@@ -20,6 +25,7 @@ namespace BluePrism.TechnicalTest.Files
             }
             catch (Exception ex)
             {
+                _logger.LogError($"FileOperation: Getting file {FilePath} Error: {ex.Message}");
                 throw new FileReadingException(ex.Message);
             }
         }
@@ -32,6 +38,8 @@ namespace BluePrism.TechnicalTest.Files
         ///<inheritdoc cref="IFileOperation.Create(string, IEnumerable{string})"/>
         public void Create(string FilePath, IEnumerable<string> TextList)
         {
+            _logger.LogInformation($"FileOperation: Creating file {FilePath}");
+
             if (string.IsNullOrEmpty(FilePath))
                 throw new ArgumentInvalidException($"Filepath must be provided.");
 
@@ -45,6 +53,7 @@ namespace BluePrism.TechnicalTest.Files
             }
             catch (Exception ex)
             {
+                _logger.LogError($"FileOperation: Creating file {FilePath} Error: {ex.Message}");
                 throw new FileWrittingException(ex.Message);
             }
         }

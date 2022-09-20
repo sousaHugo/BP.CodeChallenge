@@ -1,5 +1,8 @@
 using BluePrism.TechnicalTest.Common.Exceptions;
 using BluePrism.TechnicalTest.Files;
+using BluePrism.TechnicalTest.Services.Dictionary;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace BluePrism.TechnicalTest.Tests.Files
 {
@@ -8,13 +11,14 @@ namespace BluePrism.TechnicalTest.Tests.Files
         private IFileOperation _fileOperation;
         private readonly string _correctFileName = "teste.txt";
         private readonly string _incorrectFileName = "jjeste.txt";
-
+        private ILogger<FileOperation> _logger;
         private readonly List<string> _linesSuccess = new List<string>() { "Spin", "Spin", "Spit", "Spot" };
 
         [SetUp]
         public void Setup()
         {
-            _fileOperation = new FileOperation();
+            _logger = Mock.Of<ILogger<FileOperation>>();
+            _fileOperation = new FileOperation(_logger);
         }
 
         [Test]
