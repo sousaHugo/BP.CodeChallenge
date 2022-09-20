@@ -1,4 +1,4 @@
-# BluePrismTechnicalTest - Hugo Sousa
+# Code Challenge - Hugo Sousa
 
 ## Requirements
  Write a console application in VB.NET/C#.NET that takes the following command-line arguments:
